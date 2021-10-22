@@ -77,5 +77,6 @@ def router_tenda():
     print("%s is setting..." % common_para.new_ssid)
     driver.quit()
 
-
+def huawei_router():
+    driver.get(HUAWEI_Hi)
 
