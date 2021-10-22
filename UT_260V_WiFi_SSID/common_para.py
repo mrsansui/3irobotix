@@ -1,0 +1,1 @@
+new_ssid = 'tenda_ssid_test7'
