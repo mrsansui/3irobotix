@@ -5,6 +5,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 import time, sys, os
+import common_para
 
 chrome_options = Options()
 # chrome_options.add_argument('--headless')
@@ -37,9 +38,9 @@ def router_xiaomi():
     ssid_box.clear()
 
     # 需要修改的WiFi名称
-    new_ssid = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE'
-    print('new_ssid: ', new_ssid)
-    ssid_box.send_keys(new_ssid)
+    # new_ssid = 'ABCDEFGHIJKLMNOPQRSTUVWXYZABCDE'
+    print('new_ssid: ', common_para.new_ssid)
+    ssid_box.send_keys(common_para.new_ssid)
     # 回车保存
     ssid_box.send_keys(Keys.ENTER)
     time.sleep(2)
@@ -48,15 +49,13 @@ def router_xiaomi():
     confirm_btn.click()
     time.sleep(2)
     driver.refresh()
-    return new_ssid
+    return common_para.new_ssid
 
 def router_tenda():
     driver.get(Tenda_F3)
     # driver.maximize_window()
     time.sleep(2)
-    print("1******")
     wireless_cfg = driver.find_element_by_xpath('//*[@id="wireless"]')
-    print("2******")
     wireless_cfg.click()
     time.sleep(2)
     ssid_box = driver.find_element_by_xpath('//*[@id="wifiSSID"]')
@@ -65,29 +64,18 @@ def router_tenda():
     # 清空WiFi输入框
     ssid_box.clear()
     # 需要修改的WiFi名称
-    new_ssid = 'test_tenda'
-    print('new_ssid: ', new_ssid)
-    ssid_box.send_keys(new_ssid)
+    print('new_ssid: ', common_para.new_ssid)
+    ssid_box.send_keys(common_para.new_ssid)
     time.sleep(1)
     # 点击确认
     confirm_btn = driver.find_element_by_xpath('//*[@id="submit"]')
     confirm_btn.click()
+    time.sleep(2)
     # 弹窗确认
     alert = driver.switch_to.alert
     alert.accept()
-    print("%s is setting..." % new_ssid)
+    print("%s is setting..." % common_para.new_ssid)
     driver.quit()
-    return new_ssid
 
-def reconnect_wifi(new_ssid):
 
-    os.system("netsh wlan add profile filename=WLAN-%s.xml" % new_ssid)
-    time.sleep(2)
-    os.system("netsh wlan connect name=%s" % new_ssid)
-    print("reconnecting wifi with %s, please wait" % new_ssid)
 
-if __name__ == '__main__':
-    new_ssid = 'test_tenda'
-    print_current_time()
-    router_tenda()
-    reconnect_wifi(new_ssid)
