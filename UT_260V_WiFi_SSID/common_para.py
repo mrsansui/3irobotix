@@ -1,1 +1,2 @@
-new_ssid = 'tenda_ssid_test7'
+new_ssid = 'HUAWEI_Hi'
+new_pwd = 'Password'

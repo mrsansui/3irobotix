@@ -1,3 +1,4 @@
+
 import os
 import time
 import xml
@@ -8,7 +9,10 @@ from common_para import *
 ET.register_namespace("","http://www.microsoft.com/networking/WLAN/profile/v1")
 
 def xml_wlan_cfg():
-    # this function only can used in changeing password
+    '''
+    # this function only can used to changeing password, not for changeing ssid
+    :return:
+    '''
     print("current work directory: ",os.getcwd())
     os.chdir("C:\\Users\\Administrator")
     print("change work directory to: ", os.getcwd())
