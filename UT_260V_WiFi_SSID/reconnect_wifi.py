@@ -10,16 +10,13 @@ ET.register_namespace("","http://www.microsoft.com/networking/WLAN/profile/v1")
 
 def xml_wlan_cfg():
     '''
-    # this function only can used to changeing password, not for changeing ssid
+    # This function can only be used to modify the password test, not to modify the ssid test
     :return:
     '''
     print("current work directory: ",os.getcwd())
     os.chdir("C:\\Users\\Administrator")
     print("change work directory to: ", os.getcwd())
     file_xml = 'C:\\Users\\Administrator\\WLAN-tenda_3i.xml'
-    # tree = ET.parse(file_xml)
-    # root = tree.getroot()
-    # name = root.find('name')
     dom = xml.dom.minidom.parse(file_xml)
     root = dom.documentElement
     names = root.getElementsByTagName('name')
