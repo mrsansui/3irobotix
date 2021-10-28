@@ -9,7 +9,7 @@ from selenium.webdriver.common.by import By
 from common_para import *
 
 # 米家模组
-class MiHomeModule:
+class MiHome_M6:
     def __init__(self, platformname, platformversion, devicename):
         print("## 欢迎使用米家自动化模组 ## ")
         caps = {"platformName": platformname,
@@ -32,12 +32,15 @@ class MiHomeModule:
             print("--->启动米家app")
     # 添加设备
     def add_device(self):
+        print("--->添加设备")
         driver = self.driver
         driver.implicitly_wait(10)
         driver.find_element_by_xpath('//android.widget.ImageView[@content-desc="添加设备"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/add_device_tv').click()      # 添加设备
         driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').click()      # 搜索按钮
-        driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').send_keys('小米扫拖机器人2 Lite')
+
+        driver.find_element_by_xpath('//android.widget.EditText[@text="小米扫拖机器人2 Lite"]').send_keys('小米扫拖机器人2 Lite')
+
         driver.find_element_by_xpath('//android.widget.TextView[@text="小米扫拖机器人2 Lite"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/tips').click()  # 确认上述操作：同时按下了Home+回充
         driver.find_element_by_id('com.xiaomi.smarthome:id/next_btn').click()
@@ -80,46 +83,60 @@ class MiHomeModule:
         y2 = int(y * stop_y)
         driver.swipe(x1, y1, x2, y2, duration)
 
-        # 进入设备（房间名，设备名）
-        def enter_the_device(self, room_name, devices_name):
+    # 进入设备（房间名，设备名）
+    def enter_the_device(self, room_name, devices_name):
+        '''
 
-            driver = self.driver
-            driver.implicitly_wait(30)
+        :param self:
+        :param room_name: Rel-test
+        :param devices_name: 扫地机器人2 Lite
+        :return:
+        '''
+        driver = self.driver
+        driver.implicitly_wait(30)
 
-            try:
-                driver.find_element_by_android_uiautomator("text(\"%s\")" % room_name).click()
-                driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
-                print("--->进入%s中设备的控制界面" % room_name)
-            except:
-                driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
-                print("--->进入%s的控制界面" % devices_name)
+        try:
+            driver.find_element_by_android_uiautomator("text(\"%s\")" % room_name).click()
+            driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
+            print("--->进入%s中设备的控制界面" % room_name)
+        except:
+            driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
+            print("--->进入%s的控制界面" % devices_name)
 
-        # 删除设备（房间名）
-        def delete_devices(self):
-            print("--->开始删除设备")
-            driver = self.driver
-            driver.implicitly_wait(30)
-            time.sleep(1)
-            try:
-                driver.find_element_by_xpath('(//android.widget.ImageButon[@content-desc=" "])[2]')
+    # 删除设备（房间名）
+    def delete_device(self):
+        print("--->开始删除设备")
+        driver = self.driver
+        driver.implicitly_wait(30)
+        time.sleep(1)
+        # try:
+        #     driver.find_element_by_xpath('(//android.widget.ImageButon[@content-desc="扫地机器人2 Lite"])[2]')
+        #
+        # except:
+        #     driver.find_element_by_android_uiautomator("text(\"取消\")").click()
+        #
+        # finally:
+        try:
+            driver.find_element_by_id('com.xiaomi.smarthome:id/tv_device_name').click()
+        except:
+            TouchAction(driver).tap(x=150, y=800).perform()
+        time.sleep(1)
+        # width = driver.get_window_size()['width']
+        # height = driver.get_window_size()['height']
+        # driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)  # 滑动屏幕
+        # time.sleep(0.2)
+        # driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)
+        # time.sleep(0.2)
+        driver.find_element_by_android_uiautomator("text(\"删除设备\")").click()
+        driver.find_element_by_id('com.xiaomi.smarthome:id/button1').click()
+        time.sleep(3)
+        print("--->删除设备成功")
 
-            except:
-                driver.find_element_by_android_uiautomator("text(\"取消\")").click()
-
-            finally:
-                try:
-                    driver.find_element_by_xpath('(//android.widget.ImageButon[@content-desc=" "])[2]').click()
-                except:
-                    TouchAction(driver).tap(x=981, y=182).perform()
-                time.sleep(1)
-                width = driver.get_window_size()['width']
-                height = driver.get_window_size()['height']
-                driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)  # 滑动屏幕
-                time.sleep(0.2)
-                driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)
-                time.sleep(0.2)
-                driver.find_element_by_android_uiautomator("text(\"删除设备\")").click()
-                driver.find_element_by_id('com.xiaomi.smarthome:id/button1').click()
-                time.sleep(3)
-                print("--->删除设备成功")
+if __name__ == '__main__':
+    MiHome_260v =  MiHome_M6('Android', '10.0', 'HUAWEI-M6')
+    MiHome_260v.add_device()
+    MiHome_260v.swipe_left()
+    MiHome_260v.swipe_down()
+    MiHome_260v.enter_the_device('Rel-test', r'扫地机器人2 Lite')
+    MiHome_260v.delete_device()
 
