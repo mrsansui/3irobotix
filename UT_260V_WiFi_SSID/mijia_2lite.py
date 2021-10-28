@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from common_para import *
 
+
 # 米家模组
 class MiHome_M6:
     def __init__(self, platformname, platformversion, devicename):
@@ -30,33 +31,39 @@ class MiHome_M6:
 
         else:
             print("--->启动米家app")
+
     # 添加设备
     def add_device(self):
         print("--->添加设备")
         driver = self.driver
-        driver.implicitly_wait(10)
+        driver.implicitly_wait(30)
         driver.find_element_by_xpath('//android.widget.ImageView[@content-desc="添加设备"]').click()
-        driver.find_element_by_id('com.xiaomi.smarthome:id/add_device_tv').click()      # 添加设备
-        driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').click()      # 搜索按钮
-
-        driver.find_element_by_xpath('//android.widget.EditText[@text="小米扫拖机器人2 Lite"]').send_keys('小米扫拖机器人2 Lite')
-
+        driver.find_element_by_id('com.xiaomi.smarthome:id/add_device_tv').click()  # 添加设备
+        driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').click()  # 搜索按钮
+        driver.find_element_by_class_name('android.widget.EditText').send_keys("小米扫拖机器人2 Lite")
         driver.find_element_by_xpath('//android.widget.TextView[@text="小米扫拖机器人2 Lite"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/tips').click()  # 确认上述操作：同时按下了Home+回充
         driver.find_element_by_id('com.xiaomi.smarthome:id/next_btn').click()
         driver.find_element_by_xpath('//android.widget.TextView[@text="连接其他路由器"]').click()
-        driver.find_element_by_xpath('//android.widget.TextView[@text=%s' % new_ssid).click()
+        router_xpath = '//android.widget.TextView[@text="{}"]'.format(new_ssid)
+        driver.find_element_by_xpath(router_xpath).click()
         # 输入密码
-        driver.find_element_by_id('com.xiaomi.smarthome:id/password_input_et').send_keys(new_pwd)
-        driver.find_element_by_id('com.xiaomi.smarthome:id/right_button').click()   # 确定
+        try:
+            driver.find_element_by_id('com.xiaomi.smarthome:id/password_input_et').send_keys(new_pwd)
+            driver.find_element_by_id('com.xiaomi.smarthome:id/right_button').click()  # 确定
+        except:
+            pass
         driver.find_element_by_id('com.xiaomi.smarthome:id/next_btn').click()  # 下一步
+        print("-->Connecting to the network, please wait")
+
         driver.find_element_by_xpath('//android.widget.TextView[@text="Rel-test"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/sb_common_set').click()  # 设为首页常用设备-关闭
         driver.find_element_by_id('com.xiaomi.smarthome:id/skip').click()  # 下一步
         driver.find_element_by_id('com.xiaomi.smarthome:id/go_next').click()  # 下一步
-        driver.find_element_by_id('com.xiaomi.smarthome:id/go_next').click()  # 下一步
+        driver.find_element_by_id('com.xiaomi.smarthome:id/go_next').click()  # 开始体验
         sleep(2)
         driver.find_element_by_id('com.xiaomi.smarthome:id/agree').click()
+        print("Successfully connected to WiFi")
 
     # 向左滑动。y轴保持不变，X轴：由大变小
     def swipe_left(self, star_x=0.9, stop_x=0.1, duration=2000):
@@ -68,17 +75,16 @@ class MiHome_M6:
         x2 = int(x * stop_x)
         y2 = int(y * 0.5)
         driver.swipe(x1, y1, x2, y2, duration)
-        driver.swipe(x1, y1, x2, y2, duration)
-        driver.tap([(700, 1800)], 5)
-        driver.find_element_by_xpath('//android.widget.Button[@content-desc="返回"]').click()
+        # driver.tap([(700, 1800)], 5)
+        # driver.find_element_by_xpath('//android.widget.Button[@content-desc="返回"]').click()
 
     # 向下滑动。x轴保持不变，y轴：由小变大
-    def swipe_down(self, star_y=0.1, stop_y=0.9, duration=2000):
+    def swipe_down(self, start_y=0.1, stop_y=0.9, duration=1000):
         driver = self.driver
         x = driver.get_window_size()["width"]
         y = driver.get_window_size()["height"]
         x1 = int(x * 0.5)
-        y1 = int(y * star_y)
+        y1 = int(y * start_y)
         x2 = int(x * 0.5)
         y2 = int(y * stop_y)
         driver.swipe(x1, y1, x2, y2, duration)
@@ -97,46 +103,32 @@ class MiHome_M6:
 
         try:
             driver.find_element_by_android_uiautomator("text(\"%s\")" % room_name).click()
-            driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
             print("--->进入%s中设备的控制界面" % room_name)
         except:
-            driver.find_element_by_android_uiautomator("text(\"%s\")" % devices_name).click()
-            print("--->进入%s的控制界面" % devices_name)
+            pass
 
     # 删除设备（房间名）
     def delete_device(self):
         print("--->开始删除设备")
         driver = self.driver
         driver.implicitly_wait(30)
-        time.sleep(1)
-        # try:
-        #     driver.find_element_by_xpath('(//android.widget.ImageButon[@content-desc="扫地机器人2 Lite"])[2]')
-        #
-        # except:
-        #     driver.find_element_by_android_uiautomator("text(\"取消\")").click()
-        #
-        # finally:
         try:
-            driver.find_element_by_id('com.xiaomi.smarthome:id/tv_device_name').click()
+            antion_1 = TouchAction(driver)
+            element1 = driver.find_element_by_id(r'com.xiaomi.smarthome:id/ddx')
+            antion_1.long_press(element=element1, duration=4000).wait(5000).perform()
         except:
-            TouchAction(driver).tap(x=150, y=800).perform()
-        time.sleep(1)
-        # width = driver.get_window_size()['width']
-        # height = driver.get_window_size()['height']
-        # driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)  # 滑动屏幕
-        # time.sleep(0.2)
-        # driver.swipe(width / 2, height * 0.8, width / 2, height * 0.2)
-        # time.sleep(0.2)
+            pass
+
         driver.find_element_by_android_uiautomator("text(\"删除设备\")").click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/button1').click()
         time.sleep(3)
         print("--->删除设备成功")
 
+
 if __name__ == '__main__':
-    MiHome_260v =  MiHome_M6('Android', '10.0', 'HUAWEI-M6')
+    MiHome_260v = MiHome_M6('Android', '10.0', 'HUAWEI-M6')
     MiHome_260v.add_device()
     MiHome_260v.swipe_left()
     MiHome_260v.swipe_down()
     MiHome_260v.enter_the_device('Rel-test', r'扫地机器人2 Lite')
     MiHome_260v.delete_device()
-

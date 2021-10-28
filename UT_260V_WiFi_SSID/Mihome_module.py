@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from common_para import *
 
+
 # 米家模组
 class MiHomeModule:
     def __init__(self, platformname, platformversion, devicename):
@@ -30,13 +31,14 @@ class MiHomeModule:
 
         else:
             print("--->启动米家app")
+
     # 添加设备
     def add_device(self):
         driver = self.driver
         driver.implicitly_wait(10)
         driver.find_element_by_xpath('//android.widget.ImageView[@content-desc="添加设备"]').click()
-        driver.find_element_by_id('com.xiaomi.smarthome:id/add_device_tv').click()      # 添加设备
-        driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').click()      # 搜索按钮
+        driver.find_element_by_id('com.xiaomi.smarthome:id/add_device_tv').click()  # 添加设备
+        driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').click()  # 搜索按钮
         driver.find_element_by_id('com.xiaomi.smarthome:id/mj_search_btn').send_keys('小米扫拖机器人2 Lite')
         driver.find_element_by_xpath('//android.widget.TextView[@text="小米扫拖机器人2 Lite"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/tips').click()  # 确认上述操作：同时按下了Home+回充
@@ -45,7 +47,7 @@ class MiHomeModule:
         driver.find_element_by_xpath('//android.widget.TextView[@text=%s' % new_ssid).click()
         # 输入密码
         driver.find_element_by_id('com.xiaomi.smarthome:id/password_input_et').send_keys(new_pwd)
-        driver.find_element_by_id('com.xiaomi.smarthome:id/right_button').click()   # 确定
+        driver.find_element_by_id('com.xiaomi.smarthome:id/right_button').click()  # 确定
         driver.find_element_by_id('com.xiaomi.smarthome:id/next_btn').click()  # 下一步
         driver.find_element_by_xpath('//android.widget.TextView[@text="Rel-test"]').click()
         driver.find_element_by_id('com.xiaomi.smarthome:id/sb_common_set').click()  # 设为首页常用设备-关闭
@@ -69,8 +71,8 @@ class MiHomeModule:
         driver.tap([(700, 1800)], 5)
         driver.find_element_by_xpath('//android.widget.Button[@content-desc="返回"]').click()
 
-
         # 米家配网
+
     def mihome_distribution_network(self, devices_name, wifi_name):
         driver = self.driver
         # 隐式等待
@@ -202,5 +204,6 @@ class MiHomeModule:
         print("--->已退出米家app")
         print("本次测试结束，已为您关闭米家app，感谢您的使用！")
 
+
 if __name__ == '__main__':
-    MiHomeModule('Android','10.0','HUAWEI-M6')
+    MiHomeModule('Android', '10.0', 'HUAWEI-M6')
