@@ -1,2 +1,2 @@
-new_ssid = 'Xiaomi_F870'
+new_ssid = 'Xiaomi_1029'
 new_pwd = 'password'

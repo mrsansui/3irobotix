@@ -24,11 +24,12 @@ def router_xiaomi():
     time.sleep(2)
     login = driver.find_element_by_id("password")
     login.click()
-    login.send_keys("123456789")
+    login.send_keys("password")
     driver.find_element_by_id("btnRtSubmit").click()
     time.sleep(2)
     # 跳转到常用设置
-    driver.find_element_by_xpath('//*[@id="nav"]/ul/li[3]/a').click()
+    # driver.find_element_by_xpath('//*[@id="nav"]/ul/li[2]/a').click()
+    driver.find_element_by_link_text('常用设置').click()
     time.sleep(2)
 
     ssid_box = driver.find_element_by_xpath('//*[@id="wifiset24"]/div[2]/span/input')
