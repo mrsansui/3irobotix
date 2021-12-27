@@ -81,3 +81,4 @@ def router_tenda():
 def huawei_router():
     driver.get(HUAWEI_Hi)
 
+router_xiaomi()

@@ -1,2 +1,2 @@
-new_ssid = 'Xiaomi_1029'
-new_pwd = 'password'
+new_ssid = '$'
+new_pwd = 'Everyone'
