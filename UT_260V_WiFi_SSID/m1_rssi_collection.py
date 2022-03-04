@@ -7,7 +7,7 @@ from time import sleep
 def rssi_collect():
     ssh = paramiko.SSHClient()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh.connect('192.168.31.155', 22, 'root', '3i1S@robotMIJA')
+    ssh.connect('192.168.31.155', 22, 'root', 'robot-password')
     for i in range(0,5):
         # i += 1
         stdin, stdout, stderr = ssh.exec_command('date')
